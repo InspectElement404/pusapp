@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+interface BreedPrediction {
+  label: string;
+  score: number;
+}
+
 interface PredictionResponse {
-  breeds: string[];
+  breeds: BreedPrediction[][];
 }
 
 const App: React.FC = () => {
   const [files, setFiles] = useState<FileList | null>(null);
-  const [predictions, setPredictions] = useState<string[]>([]);
+  const [predictions, setPredictions] = useState<BreedPrediction[][]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +59,7 @@ const App: React.FC = () => {
       <div style={{ marginTop: "2rem" }}>
         <h2>Predictions:</h2>
         <ul>
-          {predictions.map((breed, idx) => (
+          {predictions.flat().map((breed, idx) => (
             <li key={idx}>
               {breed.label} — {(breed.score * 100).toFixed(2)}%
             </li>
